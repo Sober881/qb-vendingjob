@@ -169,7 +169,7 @@ end)
 
 CreateThread(function()
     while not SpawnedPed do
-    Wait(0)
+    Wait(3000)
         SpawnedPed = true
         RequestModel(GetHashKey("s_m_m_autoshop_01"))
         while not HasModelLoaded(GetHashKey("s_m_m_autoshop_01")) do
