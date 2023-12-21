@@ -2,7 +2,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local Vehicle = nil
 local VehicleBlip = nil
 local WorkBlip = nil
-local SpawnedPed = false
+local JobPed = nil
 local JobStart = false
 local StartLoading = false
 local JobReset = false
@@ -23,6 +23,28 @@ function AnimationLoop()
             end
         end
     end)
+end
+
+function SpawnPed()
+    if not DoesEntityExist(JobPed) then
+        RequestModel(GetHashKey("s_m_m_autoshop_01"))
+        while not HasModelLoaded(GetHashKey("s_m_m_autoshop_01")) do
+            Wait(0)
+        end
+        JobPed = CreatePed(4, GetHashKey("s_m_m_autoshop_01"), Config.VendingJob.StartJob, false, false)
+        FreezeEntityPosition(JobPed, true)
+        TaskSetBlockingOfNonTemporaryEvents(JobPed, true)
+        SetEntityInvincible(JobPed, true)
+        NPCBlip = AddBlipForCoord(Config.VendingJob.StartJob)
+        SetBlipSprite (NPCBlip, 85)
+        SetBlipDisplay(NPCBlip, 4)
+        SetBlipScale  (NPCBlip, 0.75)
+        SetBlipAsShortRange(NPCBlip, true)
+        SetBlipColour(NPCBlip, 3)
+        AddTextEntry('NPCBlips', Config.Notify.BLIPNAME)
+        BeginTextCommandSetBlipName('NPCBlips')
+        EndTextCommandSetBlipName(NPCBlip)
+    end
 end
 
 -- [ Events ]
@@ -70,6 +92,10 @@ RegisterNetEvent('tac-vendingjob:client:stopjob', function()
         LocationChoice = false
         QBCore.Functions.Notify(Config.Notify.stopjob, 'error')
     end
+end)
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    SpawnPed()
 end)
 
 -- [ Threads ]
@@ -164,30 +190,6 @@ CreateThread(function() -- Checks if the ped got into a car
                 end
             end
         end
-    end
-end)
-
-CreateThread(function()
-    while not SpawnedPed do
-    Wait(3000)
-        SpawnedPed = true
-        RequestModel(GetHashKey("s_m_m_autoshop_01"))
-        while not HasModelLoaded(GetHashKey("s_m_m_autoshop_01")) do
-            Wait(0)
-        end
-        local JobPed = CreatePed(4, GetHashKey("s_m_m_autoshop_01"), Config.VendingJob.StartJob, 271.37, true, false)
-        FreezeEntityPosition(JobPed, true)
-        TaskSetBlockingOfNonTemporaryEvents(JobPed, true)
-        SetEntityInvincible(JobPed, true)
-        NPCBlip = AddBlipForCoord(Config.VendingJob.StartJob)
-        SetBlipSprite (NPCBlip, 85)
-        SetBlipDisplay(NPCBlip, 4)
-        SetBlipScale  (NPCBlip, 0.75)
-        SetBlipAsShortRange(NPCBlip, true)
-        SetBlipColour(NPCBlip, 3)
-        AddTextEntry('NPCBlips', Config.Notify.BLIPNAME)
-        BeginTextCommandSetBlipName('NPCBlips')
-        EndTextCommandSetBlipName(NPCBlip)
     end
 end)
 
