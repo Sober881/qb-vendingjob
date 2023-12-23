@@ -41,7 +41,7 @@ function SpawnPed()
         SetBlipScale  (NPCBlip, 0.75)
         SetBlipAsShortRange(NPCBlip, true)
         SetBlipColour(NPCBlip, 3)
-        AddTextEntry('NPCBlips', Config.Notify.BLIPNAME)
+        AddTextEntry('NPCBlips', Locales[Config.VendingJob.Locales].BlipName)
         BeginTextCommandSetBlipName('NPCBlips')
         EndTextCommandSetBlipName(NPCBlip)
     end
@@ -73,11 +73,11 @@ RegisterNetEvent('tac-vendingjob:client:startjob', function()
         SetBlipScale  (VehicleBlip, 0.80)
         SetBlipAsShortRange(VehicleBlip, true)
         SetBlipColour(VehicleBlip, 3)
-        AddTextEntry('WorkVan', 'Ван')
+        AddTextEntry('WorkVan', Locales[Config.VendingJob.Locales].VehicleBlip)
         BeginTextCommandSetBlipName('WorkVan')
         EndTextCommandSetBlipName(VehicleBlip)
         TriggerEvent("vehiclekeys:client:SetOwner", Plate)
-        QBCore.Functions.Notify(Config.Notify.startjob, 'success')
+        QBCore.Functions.Notify(Locales[Config.VendingJob.Locales].StartJob, 'success')
     end
 end)
 
@@ -90,7 +90,7 @@ RegisterNetEvent('tac-vendingjob:client:stopjob', function()
         StartLoading = false
         BlipSpawned = false
         LocationChoice = false
-        QBCore.Functions.Notify(Config.Notify.stopjob, 'error')
+        QBCore.Functions.Notify(Locales[Config.VendingJob.Locales].StopJob, 'error')
     end
 end)
 
@@ -123,7 +123,7 @@ CreateThread(function()
                     SetBlipColour(WorkBlip, 1)
                     SetBlipRoute(WorkBlip, true)
                     SetBlipRouteColour(WorkBlip, 1)
-                    AddTextEntry('WorkBlips', 'Локация за доставка')
+                    AddTextEntry('WorkBlips', Locales[Config.VendingJob.Locales].WorkBlip)
                     BeginTextCommandSetBlipName('WorkBlips')
                     EndTextCommandSetBlipName(WorkBlip)
                 end
@@ -138,7 +138,7 @@ CreateThread(function()
                         StartLoading = false
                         JobReset = false
                         LocationChoice = false
-                        QBCore.Functions.Progressbar("vendingjob-loading", 'ЗАРЕЖДАНЕ . . .', 10000, false, true, {
+                        QBCore.Functions.Progressbar("vendingjob-loading", Locales[Config.VendingJob.Locales].ProgressBar, 10000, false, true, {
                             disableMovement = true,
                             disableCarMovement = true,
                             disableMouse = false,
@@ -147,9 +147,9 @@ CreateThread(function()
                             Animation = false
                             ExecuteCommand('e c')
                             TriggerServerEvent('tac-vending:server:givemoney')
-                            QBCore.Functions.Notify(Config.Notify.loadmachine, 'inform')
+                            QBCore.Functions.Notify(Locales[Config.VendingJob.Locales].LoadMachine, 'inform')
                             RemoveBlip(WorkBlip)
-                            QBCore.Functions.Notify(Config.Notify.govan, 'inform')
+                            QBCore.Functions.Notify(Locales[Config.VendingJob.Locales].GotoVan, 'inform')
                         end)
                     end
                 end

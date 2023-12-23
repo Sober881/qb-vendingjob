@@ -3,12 +3,14 @@ game 'gta5'
 lua54 'yes'
 
 shared_script {
-    'config.lua'
+    'config.lua',
+    'locales/en.lua',
+    'locales/bg.lua'
 }
 
 server_scripts {
-    'server/main.lua'
+    'server/sv_*.lua'
 }
 client_scripts{
-    'client/main.lua'
+    'client/cl_*.lua'
 }
